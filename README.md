@@ -1,4 +1,4 @@
-#Assignment 1 was chosen
+# Assignment 1 was chosen
 
 # How to run:
 
