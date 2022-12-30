@@ -1,19 +1,24 @@
-import Note from "./note";
+//importing the Note class
+import Note from "./note_model";
+//importing the filesystem library
 import fs from "fs";
-var express = require("express");
+//importing the express library
+import express from "express";
 
+//Using Express and the body parser middleware to parse requests into JSON.
 const app = express();
 var bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+//An initial endpoint to check if the app is working
 app.get("/", function (req, res) {
 	res.send("Working As Expected");
 });
 
+//The first of the CRUD endpoints. The endpoint takes a JSON object of type Note and adds it to the JSON file.
 app.post("/createNote", jsonParser, function (req, res) {
-	const note = req.body;
 	fs.readFile("./data.json", "utf-8", (err, data) => {
 		if (err) {
 			throw err;
@@ -36,18 +41,36 @@ app.post("/createNote", jsonParser, function (req, res) {
 	});
 });
 
+//The second of the CRUD endpoints. The endpoint doesn't take any parameters. It returns a sorted list of notes based on priority from high to low
 app.get("/readNotes", (req, res) => {
 	fs.readFile("./data.json", "utf-8", (err, data) => {
 		if (err) {
 			throw err;
 		}
 		const notes: Note[] = JSON.parse(data).notes;
-		const date = req.query.date;
 		notes.sort((x, y) => {
-			if (x[date] < y[date]) {
+			var priorityX;
+			var priorityY;
+			if (x.priority === "low") {
+				priorityX = 0;
+			} else if (x.priority === "medium") {
+				priorityX = 1;
+			} else if (x.priority === "high") {
+				priorityX = 2;
+			}
+
+			if (y.priority === "low") {
+				priorityY = 0;
+			} else if (y.priority === "medium") {
+				priorityY = 1;
+			} else if (y.priority === "high") {
+				priorityY = 2;
+			}
+
+			if (priorityX > priorityY) {
 				return -1;
 			}
-			if (x[date] > y[date]) {
+			if (priorityX < priorityY) {
 				return 1;
 			}
 			return 0;
@@ -56,6 +79,7 @@ app.get("/readNotes", (req, res) => {
 	});
 });
 
+//The second read of the CRUD operations. It takes an ID and returns the note of the said ID.
 app.get("/readNotes/:id", (req, res) => {
 	fs.readFile("./data.json", "utf-8", (err, data) => {
 		if (err) {
@@ -74,6 +98,7 @@ app.get("/readNotes/:id", (req, res) => {
 	});
 });
 
+//The third of the CRUD endpoints. This endpoints recieves both an ID and a JSON. It searches for the note with the given ID and updates it.
 app.put("/updateNote/:id", (req, res) => {
 	fs.readFile("./data.json", "utf-8", (err, data) => {
 		if (err) {
@@ -106,6 +131,7 @@ app.put("/updateNote/:id", (req, res) => {
 	});
 });
 
+//The fourth and last of the CRUD endpoints. This endpoint take an ID and deletes the note of said ID.
 app.delete("/deleteNote/:id", (req, res) => {
 	fs.readFile("./data.json", "utf-8", (err, data) => {
 		if (err) {

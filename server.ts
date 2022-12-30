@@ -1,4 +1,4 @@
-var server = require("./app.ts");
+const server = require("./app.ts");
 
 
 server.listen(3000, function () {

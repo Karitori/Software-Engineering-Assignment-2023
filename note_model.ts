@@ -19,4 +19,4 @@ class Note {
 		this.priority = priority;
 	}
 }
-export default Note;
+export = Note;
