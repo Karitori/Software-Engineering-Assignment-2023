@@ -1,4 +1,4 @@
-export default class Note {
+class Note {
 	id: number;
 	title: string;
 	description: string;
@@ -19,3 +19,4 @@ export default class Note {
 		this.priority = priority;
 	}
 }
+export default Note;

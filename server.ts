@@ -1,6 +1,6 @@
-const app = require("./app.ts");
+var server = require("./app.ts");
 
 
-app.listen(3000, function () {
+server.listen(3000, function () {
   console.log("[OK] = HTTP Server listening on: http://localhost:3000");
 });
