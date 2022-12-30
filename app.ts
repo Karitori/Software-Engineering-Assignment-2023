@@ -106,11 +106,10 @@ app.put("/updateNote/:id", (req, res) => {
 		}
 		const id = Number(req.params.id);
 		const notes: Note[] = JSON.parse(data).notes;
-
 		const noteIndex = notes.findIndex((obj) => {
-			obj.id === id;
+			return obj.id === id;
 		});
-		if (noteIndex) {
+		if (noteIndex !== -1) {
 			const updatedNote = new Note(
 				req.body.id,
 				req.body.title,
@@ -139,11 +138,10 @@ app.delete("/deleteNote/:id", (req, res) => {
 		}
 		const id = Number(req.params.id);
 		const notes: Note[] = JSON.parse(data).notes;
-
 		const noteIndex = notes.findIndex((obj) => {
-			obj.id === id;
+			return obj.id === id;
 		});
-		if (noteIndex) {
+		if (noteIndex!== -1) {
 			notes.splice(noteIndex, 1);
 			fs.writeFile("./data.json", JSON.stringify({ notes }), "utf-8", (err) => {
 				if (err) {
